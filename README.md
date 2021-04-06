@@ -3,7 +3,7 @@ HOW TO RUN:
 	
 	Run the following commands:
 	
-	flex -l lexer.l
+	flex lexer.l
 	bison -dv parser.y
 	gcc -o progOut parser.tab.c lex.yy.c -lfl
 	

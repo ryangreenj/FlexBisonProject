@@ -4,30 +4,45 @@
 #include "parser.tab.h"
 
 int lineNum = 1;
+int nestLevel = 0;
 %}
 
+%x N_COMMENT
 
 %%
 
-"program"    { return T_PROGRAM; }
-"is"         { return T_IS; }
-"begin"      { return T_BEGIN; }
-"end"        { return T_END; }
-"global"     { return T_GLOBAL; }
-"procedure"  { return T_PROCEDURE; }
-"variable"   { return T_VARIABLE; }
-"integer"    { return T_INTEGER; }
-"float"      { return T_FLOAT; }
-"string"     { return T_STRING; }
-"bool"       { return T_BOOL; }
-"if"         { return T_IF; }
-"then"       { return T_THEN; }
-"else"       { return T_ELSE; }
-"for"        { return T_FOR; }
-"return"     { return T_RETURN; }
-"not"        { return T_NOT; }
-"true"       { return T_TRUE; }
-"false"      { return T_FALSE; }
+"/*"            { BEGIN(N_COMMENT); }
+<N_COMMENT>{
+    "/*"        { ++nestLevel; }
+    "*"+"/"     { if (nestLevel > 0) --nestLevel;
+                  else BEGIN(INITIAL); }
+    "*"+        {}
+    [^/*\n]+    {}  /* */
+    [/]         {}
+    \n
+}
+
+"//".*          {} // . will not match a newline
+
+(?i:program)    { return T_PROGRAM; }
+(?i:is)         { return T_IS; }
+(?i:begin)      { return T_BEGIN; }
+(?i:end)        { return T_END; }
+(?i:global)     { return T_GLOBAL; }
+(?i:procedure)  { return T_PROCEDURE; }
+(?i:variable)   { return T_VARIABLE; }
+(?i:integer)    { return T_INTEGER; }
+(?i:float)      { return T_FLOAT; }
+(?i:string)     { return T_STRING; }
+(?i:bool)       { return T_BOOL; }
+(?i:if)         { return T_IF; }
+(?i:then)       { return T_THEN; }
+(?i:else)       { return T_ELSE; }
+(?i:for)        { return T_FOR; }
+(?i:return)     { return T_RETURN; }
+(?i:not)        { return T_NOT; }
+(?i:true)       { return T_TRUE; }
+(?i:false)      { return T_FALSE; }
 
 "("             { return T_LPAREN; }
 ")"             { return T_RPAREN; }
@@ -64,8 +79,7 @@ int lineNum = 1;
 [\"[^"]*\"]                 { yylval.strVal = strdup(yytext); return T_STRINGCONST; }
 
 [\n]    {lineNum++;}
-[" "]   {}
-[\t]    {}
+[ \t\r] {}
 [\0]    { return T_EOF; }
 
 .   {

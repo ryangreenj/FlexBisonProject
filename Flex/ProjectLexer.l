@@ -1,32 +1,47 @@
-/* Scanner for EECS 6083 Project Language */
+/* Standalone Scanner for EECS 6083 Project Language */
 %{
 #include <stdio.h>
 
 int lineNum = 1;
+int nestLevel = 0;
 %}
 
+%x N_COMMENT
 
 %%
 
-"program"    { printf("PROGRAM_KW "); }
-"is"         { printf("IS_KW "); }
-"begin"      { printf("BEGIN_KW "); }
-"end"        { printf("END_KW "); }
-"global"     { printf("GLOBAL_KW "); }
-"procedure"  { printf("PROCEDURE_KW "); }
-"variable"   { printf("VARIABLE_KW "); }
-"integer"    { printf("INTEGER_KW "); }
-"float"      { printf("FLOAT_KW "); }
-"string"     { printf("STRING_KW "); }
-"bool"       { printf("BOOL_KW "); }
-"if"         { printf("IF_KW "); }
-"then"       { printf("THEN_KW "); }
-"else"       { printf("ELSE_KW "); }
-"for"        { printf("FOR_KW "); }
-"return"     { printf("RETURN_KW "); }
-"not"        { printf("NOT_KW "); }
-"true"       { printf("TRUE_KW "); }
-"false"      { printf("FALSE_KW "); }
+"/*"            { BEGIN(N_COMMENT); }
+<N_COMMENT>{
+    "/*"        { ++nestLevel; }
+    "*"+"/"     { if (nestLevel > 0) --nestLevel;
+                  else BEGIN(INITIAL); }
+    "*"+        {}
+    [^/*\n]+    {}  /* */
+    [/]         {}
+    \n
+}
+
+"//".*          {} // . will not match a newline
+
+(?i:program)    { printf("PROGRAM_KW "); }
+(?i:is)         { printf("IS_KW "); }
+(?i:begin)      { printf("BEGIN_KW "); }
+(?i:end)        { printf("END_KW "); }
+(?i:global)     { printf("GLOBAL_KW "); }
+(?i:procedure)  { printf("PROCEDURE_KW "); }
+(?i:variable)   { printf("VARIABLE_KW "); }
+(?i:integer)    { printf("INTEGER_KW "); }
+(?i:float)      { printf("FLOAT_KW "); }
+(?i:string)     { printf("STRING_KW "); }
+(?i:bool)       { printf("BOOL_KW "); }
+(?i:if)         { printf("IF_KW "); }
+(?i:then)       { printf("THEN_KW "); }
+(?i:else)       { printf("ELSE_KW "); }
+(?i:for)        { printf("FOR_KW "); }
+(?i:return)     { printf("RETURN_KW "); }
+(?i:not)        { printf("NOT_KW "); }
+(?i:true)       { printf("TRUE_KW "); }
+(?i:false)      { printf("FALSE_KW "); }
 
 "("             { printf("LPAREN "); }
 ")"             { printf("RPAREN "); }
@@ -63,7 +78,7 @@ int lineNum = 1;
 [\"[^"]*\"]                 { printf("STRINGCONST "); }
 
 [\n]    {lineNum++; printf("\n"); }
-[ \t\r] {}
+[ \t\r]   {}
 [\0]    { printf("EOF "); }
 
 .   {
