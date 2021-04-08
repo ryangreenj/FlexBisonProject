@@ -48,8 +48,6 @@ int nestLevel = 0;
 ")"             { return T_RPAREN; }
 "["             { return T_LSQBRACKET; }
 "]"             { return T_RSQBRACKET; }
-"{"             { return T_LCURBRACKET; }
-"}"             { return T_RCURBRACKET; }
 
 ";"             { return T_SEMICOLON; }
 ":"             { return T_COLON; }
@@ -76,7 +74,7 @@ int nestLevel = 0;
 
 [0-9][0-9]*                 { yylval.intVal = atoi(yytext); return T_INTCONST; }
 [0-9][0-9]*[.[0-9]*]        { yylval.floatVal = atof(yytext); return T_FLOATCONST; }
-[\"[^"]*\"]                 { yylval.strVal = strdup(yytext); return T_STRINGCONST; }
+\"[^"]*\"                   { yylval.strVal = strdup(yytext); return T_STRINGCONST; }
 
 [\n]    {lineNum++;}
 [ \t\r] {}

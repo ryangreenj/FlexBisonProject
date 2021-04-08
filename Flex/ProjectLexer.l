@@ -18,7 +18,7 @@ int nestLevel = 0;
     "*"+        {}
     [^/*\n]+    {}  /* */
     [/]         {}
-    \n
+    \n          {}
 }
 
 "//".*          {} // . will not match a newline
@@ -47,8 +47,6 @@ int nestLevel = 0;
 ")"             { printf("RPAREN "); }
 "["             { printf("LSQBRACKET "); }
 "]"             { printf("RSQBRACKET "); }
-"{"             { printf("LCURBRACKET "); }
-"}"             { printf("RCURBRACKET "); }
 
 ";"             { printf("SEMICOLON "); }
 ":"             { printf("COLON "); }
@@ -78,7 +76,7 @@ int nestLevel = 0;
 [\"[^"]*\"]                 { printf("STRINGCONST "); }
 
 [\n]    {lineNum++; printf("\n"); }
-[ \t\r]   {}
+[ \t\r] {}
 [\0]    { printf("EOF "); }
 
 .   {
