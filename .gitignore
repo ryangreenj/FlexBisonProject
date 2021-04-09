@@ -3,3 +3,6 @@ parser.output
 parser.tab.c
 parser.tab.h
 progOut
+Bison/Calc.output
+Bison/Calc.tab.c
+Bison/Calc.tab.h

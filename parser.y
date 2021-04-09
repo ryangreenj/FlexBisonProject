@@ -7,20 +7,6 @@
 extern int lineNum;
 int yylex();
 int yyerror(char *s);
-/*
-struct nodeStruct {
-    char* nodeName;
-    struct node* c1;
-    struct node* c2;
-    struct node* c3;
-};
-
-typedef struct nodeStruct node;
-
-node* root;
-
-node* newNode(char* nodeName, node* c1, node* c2, node* c3);
-*/
 %}
 
 %code requires {
