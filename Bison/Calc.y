@@ -12,8 +12,8 @@ int yyerror(char *s);
     int intVal;
 }
 
-%token T_SEMICOLON
-%token <intVal> T_ADD T_SUBTRACT T_MULTIPLY T_DIVIDE T_NUM
+%token T_SEMICOLON T_ADD T_SUBTRACT T_MULTIPLY T_DIVIDE
+%token <intVal> T_NUM
 
 %type <intVal> addSub multDiv
 
