@@ -72,8 +72,8 @@ int nestLevel = 0;
 [a-zA-Z][a-zA-Z0-9_]*       { printf("IDENTIFIER "); }
 
 [0-9][0-9]*                 { printf("INTCONST "); }
-[0-9][0-9]*[.[0-9]*]        { printf("FLOATCONST "); }
-[\"[^"]*\"]                 { printf("STRINGCONST "); }
+[0-9]*[.][0-9]+             { printf("FLOATCONST "); }
+\"[^"]*\"                   { printf("STRINGCONST "); }
 
 [\n]    {lineNum++; printf("\n"); }
 [ \t\r] {}
@@ -90,8 +90,8 @@ int nestLevel = 0;
 int yywrap() {}
 int main(int argc, char **argv)
 {
-    FILE *file = fopen(argv[1], "r");
-    yyin = file;
+    //FILE *file = fopen(argv[1], "r");
+    //yyin = file;
     
     yylex();
     printf("\nFile contained %d lines.\n", lineNum);

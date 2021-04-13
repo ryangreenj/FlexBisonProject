@@ -73,7 +73,7 @@ int nestLevel = 0;
 [a-zA-Z][a-zA-Z0-9_]*       { yylval.strVal = strdup(yytext); return T_IDENTIFIER; }
 
 [0-9][0-9]*                 { yylval.intVal = atoi(yytext); return T_INTCONST; }
-[0-9][0-9]*[.[0-9]*]        { yylval.floatVal = atof(yytext); return T_FLOATCONST; }
+[0-9]*[.][0-9]+             { yylval.floatVal = atof(yytext); return T_FLOATCONST; }
 \"[^"]*\"                   { yylval.strVal = strdup(yytext); return T_STRINGCONST; }
 
 [\n]    {lineNum++;}
